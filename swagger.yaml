@@ -1,0 +1,196 @@
+swagger: "2.0"
+info:
+  description: "TodoApp API documentation"
+  version: "1.0.0"
+  title: "TodoApp"
+  termsOfService: "http://swagger.io/terms/"
+
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "jsonplaceholder.typicode.com"
+basePath: "/"
+tags:
+- name: "Todo"
+- name: "User"
+
+schemes:
+- "https"
+- "http"
+
+paths:
+  /todos:
+    get:
+      summary: Returns all todos
+      description: Returns all todos
+      tags: 
+        - Todo
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Todo'
+    post:
+      summary: Create new todo
+      description: Create new todo
+      tags: 
+        - Todo
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/TodoUpdate'
+      responses:
+        201:
+          description: OK
+  /todos/{todoId}:
+    get:
+      summary: Returns a single todo
+      description: Returns a single todo
+      tags: 
+        - Todo
+      parameters: 
+        - in: path
+          name: todoId
+          type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Todo'
+    delete:
+      summary: Deletes the todo
+      description: Deletes the todo
+      tags: 
+        - Todo
+      parameters: 
+        - in: path
+          name: todoId
+          type: integer
+          required: true
+      responses:
+        204:
+          description: OK
+    put:
+      summary: Updates the todo
+      description: Updates the todo
+      tags: 
+        - Todo
+      parameters: 
+        - in: path
+          name: todoId
+          type: integer
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/TodoUpdate'
+      responses:
+        201:
+          description: OK
+    
+  /users:
+    get:
+      summary: Returns all users
+      description: Returns all users
+      tags:
+        - User
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+  /users/{userId}:
+    get:
+      summary: Returns a single user
+      description: Returns a single user 
+      tags: 
+        - User
+      parameters: 
+        - in: path
+          name: userId
+          type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+    
+    
+    
+definitions:
+  Todo:
+    type: object
+    properties:
+      userId:
+        type: integer
+
+      id:
+        type: integer
+
+      title:
+        type: string
+      completed:
+        type: boolean
+  TodoUpdate:
+    type: object
+    properties:
+      userId:
+        type: integer
+      title:
+        type: string
+      completed:
+        type: boolean
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+      address:
+        type: object
+        properties:
+          street:
+            type: string
+          suite:
+            type: string
+          city:
+            type: string
+          zipcode:
+            type: string
+          geo:
+            type: object
+            properties:
+              lat:
+                type: string
+              lng:
+                type: string
+      phone:
+        type: string
+      website:
+        type: string
+      company:
+        type: object
+        properties:
+          name:
+            type: string
+          catchPhrase:
+            type: string
+          bs:
+            type: string
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
