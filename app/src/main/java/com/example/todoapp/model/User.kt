@@ -1,22 +1,38 @@
 package com.example.todoapp.model
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "user")
 data class User(
     @SerializedName("address")
     val address: Address,
     @SerializedName("company")
     val company: Company,
+
+    @ColumnInfo(name="email")
     @SerializedName("email")
     val email: String,
+
+    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     val id: Int,
+
+    @ColumnInfo(name="name")
     @SerializedName("name")
     val name: String,
+
+
     @SerializedName("phone")
     val phone: String,
+
+    @ColumnInfo(name="username")
     @SerializedName("username")
     val username: String,
+
+
     @SerializedName("website")
     val website: String
 )
