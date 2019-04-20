@@ -23,8 +23,8 @@ paths:
     get:
       summary: Returns all todos
       description: Returns all todos
-      tags: 
-        - Todo
+      tags:
+      - Todo
       responses:
         200:
           description: OK
@@ -35,27 +35,29 @@ paths:
     post:
       summary: Create new todo
       description: Create new todo
-      tags: 
-        - Todo
-      parameters: 
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/TodoUpdate'
+      tags:
+      - Todo
+      parameters:
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/TodoUpdate'
       responses:
         201:
           description: OK
+          schema:
+            $ref: '#/definitions/Todo'
   /todos/{todoId}:
     get:
       summary: Returns a single todo
       description: Returns a single todo
-      tags: 
-        - Todo
-      parameters: 
-        - in: path
-          name: todoId
-          type: integer
-          required: true
+      tags:
+      - Todo
+      parameters:
+      - in: path
+        name: todoId
+        type: integer
+        required: true
       responses:
         200:
           description: OK
@@ -64,41 +66,41 @@ paths:
     delete:
       summary: Deletes the todo
       description: Deletes the todo
-      tags: 
-        - Todo
-      parameters: 
-        - in: path
-          name: todoId
-          type: integer
-          required: true
+      tags:
+      - Todo
+      parameters:
+      - in: path
+        name: todoId
+        type: integer
+        required: true
       responses:
         204:
           description: OK
     put:
       summary: Updates the todo
       description: Updates the todo
-      tags: 
-        - Todo
-      parameters: 
-        - in: path
-          name: todoId
-          type: integer
-          required: true
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/TodoUpdate'
+      tags:
+      - Todo
+      parameters:
+      - in: path
+        name: todoId
+        type: integer
+        required: true
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/TodoUpdate'
       responses:
         201:
           description: OK
-    
+
   /users:
     get:
       summary: Returns all users
       description: Returns all users
       tags:
-        - User
+      - User
       responses:
         200:
           description: OK
@@ -109,22 +111,22 @@ paths:
   /users/{userId}:
     get:
       summary: Returns a single user
-      description: Returns a single user 
-      tags: 
-        - User
-      parameters: 
-        - in: path
-          name: userId
-          type: integer
-          required: true
+      description: Returns a single user
+      tags:
+      - User
+      parameters:
+      - in: path
+        name: userId
+        type: integer
+        required: true
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/User'
-    
-    
-    
+
+
+
 definitions:
   Todo:
     type: object

@@ -3,6 +3,7 @@ package com.example.todoapp.ui.todo
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class TodoFragment: Fragment(), TodoScreen {
         super.onAttach(context)
         injector.inject(this)
         todoPresenter.attachScreen(this)
+        todoPresenter.deleteTodo(1)
     }
 
     override fun onDetach() {
@@ -34,7 +36,7 @@ class TodoFragment: Fragment(), TodoScreen {
     }
 
     override fun showTodos(todos: List<Todo>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d("Todos", todos.toString())
     }
 
     override fun showNetworkError(error: String) {

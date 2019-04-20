@@ -17,10 +17,10 @@ import retrofit2.http.DELETE
 
 interface TodoApi {
     @GET("todos")
-    fun getTodos(): Call<TodoResult>
+    fun getTodos(): Call<List<Todo>>
 
     @POST("todos")
-    fun createTodo(@Body body: TodoUpdate): Call<Void>
+    fun createTodo(@Body body: TodoUpdate): Call<Todo>
 
     @GET("todos/{todoId}")
     fun getTodoById(
