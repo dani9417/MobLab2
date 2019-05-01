@@ -2,6 +2,7 @@ package com.example.todoapp.ui
 
 import android.content.Context
 import com.example.todoapp.interactor.todos.TodoInteractor
+import com.example.todoapp.interactor.users.UserInteractor
 import com.example.todoapp.ui.main.MainPresenter
 import com.example.todoapp.ui.todo.TodoPresenter
 import dagger.Module
@@ -18,7 +19,7 @@ class UIModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun mainPresenter() = MainPresenter()
+    fun mainPresenter(executor: Executor, userInteractor: UserInteractor) = MainPresenter(executor, userInteractor)
 
     @Provides
     @Singleton
