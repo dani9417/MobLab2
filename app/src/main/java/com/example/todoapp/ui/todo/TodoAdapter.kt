@@ -1,10 +1,10 @@
 package com.example.todoapp.ui.todo
 
-import android.app.Activity
 import android.content.Context
-import android.support.v4.app.Fragment
+import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +14,22 @@ import com.example.todoapp.R
 import com.example.todoapp.model.Todo
 import kotlinx.android.synthetic.main.todo_item_row.view.*
 
+
 class TodoAdapter constructor(
     private val context: Context,
-    private var todos: List<Todo>) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
+    private var todos: MutableList<Todo>) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
+
+    var deleteTodo : Todo? = null
+    var deletePosition: Int? = null
+
+    interface TodoAdapterListener {
+        fun deleteTodo(id: Int)
+    }
+
+
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.todo_item_row, p0,false)
+        val itemView = LayoutInflater.from(context).inflate(com.example.todoapp.R.layout.todo_item_row, p0,false)
         return ViewHolder(itemView)
     }
 
@@ -38,6 +48,39 @@ class TodoAdapter constructor(
             val fm = (context as FragmentActivity).supportFragmentManager
             todoDialogFragment.show(fm, "TODO_DIALOG")
         }
+    }
+
+    fun deleteItem(position: Int) {
+        deleteTodo = todos[position]
+        deletePosition = position
+        todos.removeAt(position)
+        notifyItemRemoved(position)
+        showUndoSnackbar()
+
+
+    }
+
+     fun showUndoSnackbar() {
+        val view = (context as TodoActivity).findViewById<View>(R.id.todoContainer)
+        val snackbar = Snackbar.make(
+            view, "Undo delete",
+            Snackbar.LENGTH_SHORT
+        )
+        snackbar.setAction("Undo") { undoDelete() }
+         snackbar.addCallback(object:Snackbar.Callback() {
+             override fun onDismissed(snackbar:Snackbar, event:Int) {
+                 if(event != 1) {
+                     (context as TodoAdapterListener).deleteTodo(deletePosition!!)
+                 }
+
+             }
+         })
+         snackbar.show()
+    }
+
+    fun undoDelete() {
+        todos.add(deletePosition!!, deleteTodo!!)
+        notifyItemInserted(deletePosition!!)
     }
 
 

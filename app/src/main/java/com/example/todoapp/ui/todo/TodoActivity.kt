@@ -3,15 +3,18 @@ package com.example.todoapp.ui.todo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import com.example.todoapp.R
 import com.example.todoapp.injector
 import com.example.todoapp.model.Todo
+import com.example.todoapp.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_todo.*
 import javax.inject.Inject
 
-class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyTodoDialogListener {
+class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyTodoDialogListener, TodoAdapter.TodoAdapterListener {
+
 
 
     @Inject
@@ -33,6 +36,8 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
 
         todoAdapter = TodoAdapter(this, displayedTodos )
         recyclerViewTodos.adapter = todoAdapter
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(todoAdapter!!))
+        itemTouchHelper.attachToRecyclerView(recyclerViewTodos)
 
         swipeRefreshLayoutTodos.setOnRefreshListener {
             todoPresenter.refreshTodos()
@@ -58,6 +63,7 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
 
     override fun onModifyTodo(todo: Todo) {
         Log.d("mod", todo.toString())
+        todoPresenter.updateTodo(todo.id, todo)
     }
 
 
@@ -69,6 +75,10 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
 
         }
         todoAdapter?.notifyDataSetChanged()
+    }
+
+    override fun deleteTodo(id: Int) {
+      todoPresenter.deleteTodo(id)
     }
 
     override fun showNetworkError(error: String) {

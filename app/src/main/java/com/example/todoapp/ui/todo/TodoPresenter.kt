@@ -3,6 +3,7 @@ package com.example.todoapp.ui.todo
 import com.example.todoapp.interactor.todos.TodoInteractor
 import com.example.todoapp.interactor.todos.event.GetTodosEvent
 import com.example.todoapp.model.Todo
+import com.example.todoapp.model.TodoUpdate
 import com.example.todoapp.ui.Presenter
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -34,8 +35,10 @@ class TodoPresenter @Inject constructor(private val executor: Executor, private 
 
     }
 
-    fun updateTodo(todoId: Number, todo: Todo) {
-
+    fun updateTodo(todoId: Int, todo: Todo) {
+        executor.execute {
+            todosInteractor.updateTodo(todoId, TodoUpdate(todoId, todo.title, todo.completed))
+        }
     }
 
     fun deleteTodo(todoId: Int) {
