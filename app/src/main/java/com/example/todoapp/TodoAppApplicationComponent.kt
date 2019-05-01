@@ -4,6 +4,7 @@ import com.example.todoapp.interactor.InteractorModule
 import com.example.todoapp.network.NetworkModule
 import com.example.todoapp.ui.UIModule
 import com.example.todoapp.ui.main.MainActivity
+import com.example.todoapp.ui.todo.TodoActivity
 import com.example.todoapp.ui.todo.TodoFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -13,4 +14,5 @@ import javax.inject.Singleton
 interface TodoAppApplicationComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(todoFragment: TodoFragment)
+    fun inject(todoActivity: TodoActivity)
 }

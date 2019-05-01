@@ -14,7 +14,8 @@ import com.example.todoapp.model.Todo
 import kotlinx.android.synthetic.main.fragment_todo.*
 import javax.inject.Inject
 
-class TodoFragment: Fragment(), TodoScreen {
+class TodoFragment: Fragment(), TodoScreen, TodoDialogFragment.ModifyTodoDialogListener {
+
 
     private var todoAdapter:TodoAdapter? = null
     private val displayedTodos: MutableList<Todo> = mutableListOf()
@@ -50,7 +51,7 @@ class TodoFragment: Fragment(), TodoScreen {
         llm.orientation = LinearLayoutManager.VERTICAL
         recyclerViewTodos.layoutManager = llm
 
-        todoAdapter = TodoAdapter(context!!, displayedTodos)
+        todoAdapter = TodoAdapter(context!!, displayedTodos )
         recyclerViewTodos.adapter = todoAdapter
 
         swipeRefreshLayoutTodos.setOnRefreshListener {
@@ -63,8 +64,13 @@ class TodoFragment: Fragment(), TodoScreen {
         displayedTodos.clear()
         if(todos != null) {
             displayedTodos.addAll(todos)
+
         }
         todoAdapter?.notifyDataSetChanged()
+    }
+
+    override fun onModifyTodo(todo: Todo) {
+      Log.d("modify", todo.toString())
     }
 
     override fun showNetworkError(error: String) {

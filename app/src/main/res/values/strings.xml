@@ -2,4 +2,6 @@
     <string name="app_name">TodoApp</string>
     <string name="action_settings">Settings</string>
     <string name="appTitle">Todo App</string>
+    <string name="todo_task">Todo task</string>
+    <string name="todo_completed">Todo completed</string>
 </resources>

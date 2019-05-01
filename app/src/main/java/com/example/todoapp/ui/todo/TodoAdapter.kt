@@ -1,6 +1,9 @@
 package com.example.todoapp.ui.todo
 
+import android.app.Activity
 import android.content.Context
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +32,12 @@ class TodoAdapter constructor(
         holder.todoCheck.isChecked = todo.completed
         holder.todoName.text = "Todo #${position+1}"
         holder.todoTask.text = todo.title
+
+        holder.todoName.setOnClickListener {
+            var todoDialogFragment = TodoDialogFragment.newInstance(todo)
+            val fm = (context as FragmentActivity).supportFragmentManager
+            todoDialogFragment.show(fm, "TODO_DIALOG")
+        }
     }
 
 
