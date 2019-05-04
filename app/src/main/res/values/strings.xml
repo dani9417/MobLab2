@@ -4,4 +4,5 @@
     <string name="appTitle">Todo App</string>
     <string name="todo_task">Todo task</string>
     <string name="todo_completed">Todo completed</string>
+    <string name="create_new_todo">Create new todo</string>
 </resources>

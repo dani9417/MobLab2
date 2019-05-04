@@ -5,17 +5,19 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import com.example.todoapp.R
 import com.example.todoapp.injector
+import com.example.todoapp.model.DAO.TodoDatabase
 import com.example.todoapp.model.Todo
+import com.example.todoapp.model.TodoUpdate
 import com.example.todoapp.ui.SwipeToDeleteCallback
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_todo.*
 import javax.inject.Inject
 
 class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyTodoDialogListener, TodoAdapter.TodoAdapterListener {
-
-
 
     @Inject
     lateinit var todoPresenter: TodoPresenter
@@ -42,7 +44,13 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
         swipeRefreshLayoutTodos.setOnRefreshListener {
             todoPresenter.refreshTodos()
         }
-//        supportFragmentManager.beginTransaction().replace(R.id.fragment, TodoFragment.newInstance()).commit()
+
+        val dbThread = Thread {
+            val todos = TodoDatabase.getInstance(this).todoDao().getTodos()
+            Log.d("todo_dao", todos.toString())
+        }
+        dbThread.start()
+
     }
 
     override fun onStart() {
@@ -61,28 +69,79 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
         super.onStop()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_todo,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val id = item?.itemId
+        if(id == R.id.create_todo) {
+            val todoDialogFragment = TodoDialogFragment.newInstance(null)
+            todoDialogFragment.show(supportFragmentManager, "CREATE_TODO")
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onModifyTodo(todo: Todo) {
-        Log.d("mod", todo.toString())
         todoPresenter.updateTodo(todo.id, todo)
+        val dbThread = Thread {
+
+        }
+    }
+
+    override fun onCreateTodo(todo: TodoUpdate) {
+        todoPresenter.createTodo(todo)
+        val dbThread = Thread {
+            TodoDatabase.getInstance(this@TodoActivity)
+                .todoDao()
+                .createTodo(Todo(id=0,title = todo.title, userId = todo.userId, completed = todo.completed))
+        }
+        dbThread.start()
+        todoAdapter?.notifyDataSetChanged()
     }
 
 
     override fun showTodos(todos: List<Todo>?) {
-        swipeRefreshLayoutTodos.isRefreshing = false
-        displayedTodos.clear()
-        if(todos != null) {
-            displayedTodos.addAll(todos)
+
+        val dbThread = Thread {
+            val todoDao = TodoDatabase.getInstance(this@TodoActivity).todoDao()
+            val todosFromDb = todoDao.getTodos()
+
+            swipeRefreshLayoutTodos.isRefreshing = false
+
+            displayedTodos.clear()
+            if(todosFromDb.isEmpty()) {
+                if (todos != null) {
+                    todos.forEach { todoDao.createTodo(it) }
+                    displayedTodos.addAll(todos)
+                }
+            }
+            else {
+                displayedTodos.addAll(todosFromDb)
+            }
 
         }
-        todoAdapter?.notifyDataSetChanged()
+
+
+        dbThread.start()
+        todoAdapter?.setTodos(displayedTodos)
     }
 
-    override fun deleteTodo(id: Int) {
-      todoPresenter.deleteTodo(id)
+    override fun deleteTodo(todo: Todo?) {
+        if (todo != null) {
+            todoPresenter.deleteTodo(todo.id)
+            val dbThread = Thread {
+                TodoDatabase.getInstance(this@TodoActivity).todoDao().deleteTodo(todo)
+            }
+            dbThread.start()
+            todoAdapter?.notifyDataSetChanged()
+        }
+
     }
 
     override fun showNetworkError(error: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this,error, Toast.LENGTH_LONG).show()
     }
 
 

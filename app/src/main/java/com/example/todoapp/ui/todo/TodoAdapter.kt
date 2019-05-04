@@ -23,7 +23,7 @@ class TodoAdapter constructor(
     var deletePosition: Int? = null
 
     interface TodoAdapterListener {
-        fun deleteTodo(id: Int)
+        fun deleteTodo(todo: Todo?)
     }
 
 
@@ -40,11 +40,11 @@ class TodoAdapter constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val todo = todos[position]
         holder.todoCheck.isChecked = todo.completed
-        holder.todoName.text = "Todo #${position+1}"
+        holder.todoName.text = "Todo #${todo.id}"
         holder.todoTask.text = todo.title
 
         holder.todoName.setOnClickListener {
-            var todoDialogFragment = TodoDialogFragment.newInstance(todo)
+            val todoDialogFragment = TodoDialogFragment.newInstance(todo)
             val fm = (context as FragmentActivity).supportFragmentManager
             todoDialogFragment.show(fm, "TODO_DIALOG")
         }
@@ -70,12 +70,17 @@ class TodoAdapter constructor(
          snackbar.addCallback(object:Snackbar.Callback() {
              override fun onDismissed(snackbar:Snackbar, event:Int) {
                  if(event != 1) {
-                     (context as TodoAdapterListener).deleteTodo(deletePosition!!)
+                     (context as TodoAdapterListener).deleteTodo(deleteTodo)
                  }
 
              }
          })
          snackbar.show()
+    }
+
+    fun setTodos(todoList: MutableList<Todo>) {
+        todos = todoList
+        notifyDataSetChanged()
     }
 
     fun undoDelete() {

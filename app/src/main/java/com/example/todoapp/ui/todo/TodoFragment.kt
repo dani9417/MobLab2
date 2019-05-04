@@ -11,10 +11,11 @@ import android.view.ViewGroup
 import com.example.todoapp.R
 import com.example.todoapp.injector
 import com.example.todoapp.model.Todo
+import com.example.todoapp.model.TodoUpdate
 import kotlinx.android.synthetic.main.fragment_todo.*
 import javax.inject.Inject
 
-class TodoFragment: Fragment(), TodoScreen, TodoDialogFragment.ModifyTodoDialogListener {
+abstract class TodoFragment: Fragment(), TodoScreen, TodoDialogFragment.ModifyTodoDialogListener {
 
 
     private var todoAdapter:TodoAdapter? = null
@@ -73,15 +74,16 @@ class TodoFragment: Fragment(), TodoScreen, TodoDialogFragment.ModifyTodoDialogL
       Log.d("modify", todo.toString())
     }
 
+    override fun onCreateTodo(todo: TodoUpdate) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+
     override fun showNetworkError(error: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    companion object {
 
-        fun newInstance(): TodoFragment {
-            return TodoFragment()
-        }
-    }
 
 }

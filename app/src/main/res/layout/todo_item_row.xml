@@ -27,6 +27,9 @@
     </LinearLayout>
     <CheckBox
             android:layout_width="2dp"
-            android:layout_height="wrap_content" android:id="@+id/todoCheck" android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/todoCheck"
+            android:clickable="false"
+            android:layout_weight="1"
     />
 </LinearLayout>
