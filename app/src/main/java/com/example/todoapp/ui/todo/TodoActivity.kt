@@ -86,8 +86,14 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
     override fun onModifyTodo(todo: Todo) {
         todoPresenter.updateTodo(todo.id, todo)
         val dbThread = Thread {
+            TodoDatabase.getInstance(this@TodoActivity).todoDao().updateTodo(todo)
 
+            runOnUiThread {
+                todoPresenter.refreshTodos()
+                todoAdapter?.notifyDataSetChanged()
+            }
         }
+        dbThread.start()
     }
 
     override fun onCreateTodo(todo: TodoUpdate) {
@@ -96,9 +102,14 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
             TodoDatabase.getInstance(this@TodoActivity)
                 .todoDao()
                 .createTodo(Todo(id=0,title = todo.title, userId = todo.userId, completed = todo.completed))
+
+            runOnUiThread {
+                todoPresenter.refreshTodos()
+                todoAdapter?.notifyDataSetChanged()
+            }
         }
         dbThread.start()
-        todoAdapter?.notifyDataSetChanged()
+
     }
 
 
@@ -114,18 +125,21 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
             if(todosFromDb.isEmpty()) {
                 if (todos != null) {
                     todos.forEach { todoDao.createTodo(it) }
-                    displayedTodos.addAll(todos)
+                    displayedTodos.addAll(todos.sortedBy { -it.id })
                 }
             }
             else {
-                displayedTodos.addAll(todosFromDb)
+                displayedTodos.addAll(todosFromDb.sortedBy { -it.id })
+            }
+
+            runOnUiThread {
+                todoAdapter?.notifyDataSetChanged()
             }
 
         }
 
 
         dbThread.start()
-        todoAdapter?.setTodos(displayedTodos)
     }
 
     override fun deleteTodo(todo: Todo?) {
@@ -133,9 +147,13 @@ class TodoActivity : AppCompatActivity(), TodoScreen, TodoDialogFragment.ModifyT
             todoPresenter.deleteTodo(todo.id)
             val dbThread = Thread {
                 TodoDatabase.getInstance(this@TodoActivity).todoDao().deleteTodo(todo)
+                runOnUiThread {
+                    todoPresenter.refreshTodos()
+                    todoAdapter?.notifyDataSetChanged()
+                }
             }
             dbThread.start()
-            todoAdapter?.notifyDataSetChanged()
+
         }
 
     }
