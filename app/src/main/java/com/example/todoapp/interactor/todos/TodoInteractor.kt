@@ -39,6 +39,7 @@ class TodoInteractor @Inject constructor(private var todosApi: TodoApi) {
             val deleteCall = todosApi.deleteTodo(todoId)
             val response = deleteCall.execute()
             Log.d("Reponse", response.headers().toString())
+            EventBus.getDefault().post(event)
         }
         catch (e: Exception) {
             event.throwable = e

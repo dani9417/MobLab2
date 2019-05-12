@@ -15,7 +15,7 @@ class  UserInteractor @Inject constructor(private var userApi: UserApi) {
         try {
             val usersCall = userApi.getUsers()
             val response = usersCall.execute()
-            Log.d("Reponse", response.body().toString())
+            Log.d("Reponse users", response.body().toString())
             if(response.code() != 200) {
                 throw Exception("Result code is not 200, something happened")
             }
@@ -35,7 +35,7 @@ class  UserInteractor @Inject constructor(private var userApi: UserApi) {
         try {
             val userCall = userApi.getUserById(userId)
             val response = userCall.execute()
-            Log.d("Reponse", response.body().toString())
+            Log.d("Reponse user", response.body().toString())
             if(response.code() != 200) {
                 throw Exception("Result code is not 200, something happened")
             }

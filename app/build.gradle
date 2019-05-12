@@ -19,6 +19,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -42,11 +47,31 @@ dependencies {
     implementation'com.squareup.okhttp3:logging-interceptor:3.12.1'
 
     implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+
 
     implementation 'org.greenrobot:eventbus:3.1.1'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.robolectric:robolectric:4.2"
+    testImplementation "org.mockito:mockito-core:2.23.4"
+
+    testImplementation "com.google.dagger:dagger:2.21"
+    testImplementation 'javax.annotation:jsr250-api:1.0'
+    kaptTest "com.google.dagger:dagger-compiler:2.21"
+
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.2"
+    androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:3.0.2"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:3.0.2"
+    androidTestImplementation "org.mockito:mockito-core:2.23.4"
+    androidTestImplementation "com.android.support.test:runner:1.0.2"
+    androidTestImplementation "com.android.support.test:rules:1.0.2"
+    androidTestImplementation "com.android.support:support-annotations:28.0.0"
+
+    androidTestImplementation "com.google.dagger:dagger:2.21"
+    androidTestImplementation 'javax.annotation:jsr250-api:1.0'
+    kaptAndroidTest "com.google.dagger:dagger-compiler:2.21"
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 

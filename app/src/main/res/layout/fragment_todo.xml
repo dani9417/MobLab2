@@ -5,26 +5,20 @@
 
 
     <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayoutArtists"
+            android:id="@+id/swipeRefreshLayoutTodos"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="#FFFFFF">
 
         <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerViewArtists"
+                android:id="@+id/recyclerViewTodos"
                 android:layout_width="match_parent"
                 tools:orientation="vertical"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/todo_item_row"/>
 
-        <TextView
-                android:id="@+id/tvEmpty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/recyclerViewArtists"
-                android:gravity="center"
-                 />
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

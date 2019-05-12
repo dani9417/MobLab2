@@ -2,7 +2,6 @@ package com.example.todoapp.model.DAO
 
 import android.arch.persistence.room.*
 import com.example.todoapp.model.Todo
-import com.example.todoapp.model.TodoUpdate
 
 @Dao
 interface TodoDAO {
@@ -15,9 +14,10 @@ interface TodoDAO {
     @Delete
     fun deleteTodo(todo: Todo)
 
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun createTodo(vararg todo: Todo)
 
     @Update
-    fun updateTodo(todo: TodoUpdate)
+    fun updateTodo(todo: Todo)
 }

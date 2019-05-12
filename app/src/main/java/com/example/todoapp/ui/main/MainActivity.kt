@@ -2,13 +2,15 @@ package com.example.todoapp.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.example.todoapp.R
 import com.example.todoapp.injector
+import com.example.todoapp.model.User
 import com.example.todoapp.ui.todo.TodoActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainScreen {
@@ -23,10 +25,9 @@ class MainActivity : AppCompatActivity(), MainScreen {
         injector.inject(this)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener {
+        todoLogo.setOnClickListener {
             mainPresenter.navigateToTodoList()
         }
-
     }
 
     override fun onStart() {
@@ -40,10 +41,14 @@ class MainActivity : AppCompatActivity(), MainScreen {
     }
 
     override fun showTodos() {
-        Toast.makeText(this, "navigate", Toast.LENGTH_LONG).show()
         val intent = Intent(this, TodoActivity::class.java)
         startActivity(intent)
     }
+
+    override fun getUsers(users: MutableList<User>) {
+        Log.d("mainact", users.toString())
+    }
+
 
 
 

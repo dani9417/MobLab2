@@ -1,8 +1,10 @@
 package com.example.todoapp.ui.todo
 
 import com.example.todoapp.interactor.todos.TodoInteractor
+import com.example.todoapp.interactor.todos.event.DeleteTodoEvent
 import com.example.todoapp.interactor.todos.event.GetTodosEvent
 import com.example.todoapp.model.Todo
+import com.example.todoapp.model.TodoUpdate
 import com.example.todoapp.ui.Presenter
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -30,12 +32,17 @@ class TodoPresenter @Inject constructor(private val executor: Executor, private 
 
     }
 
-    fun refreshUsers() {
-
+    fun  createTodo(todo: TodoUpdate) {
+        executor.execute {
+            todosInteractor.createNewTodo(todo)
+        }
     }
 
-    fun updateTodo(todoId: Number, todo: Todo) {
 
+    fun updateTodo(todoId: Int, todo: Todo) {
+        executor.execute {
+            todosInteractor.updateTodo(todoId, TodoUpdate(todoId, todo.title, todo.completed))
+        }
     }
 
     fun deleteTodo(todoId: Int) {
@@ -56,6 +63,21 @@ class TodoPresenter @Inject constructor(private val executor: Executor, private 
                 if (event.todos != null) {
                     screen?.showTodos(event.todos as MutableList<Todo>)
                 }
+
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    fun onDeleteEvent(event: DeleteTodoEvent) {
+        if(event.throwable != null) {
+            event.throwable?.printStackTrace()
+            if (screen != null) {
+                screen?.showNetworkError(event.throwable?.message.orEmpty())
+            }
+        }
+        else {
+            if (screen != null) {
 
             }
         }

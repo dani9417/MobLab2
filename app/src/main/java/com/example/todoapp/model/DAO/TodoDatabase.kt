@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.example.todoapp.model.Todo
 
-@Database(entities = [Todo::class], version = 1)
+@Database(entities = [Todo::class], version = 2)
 abstract class TodoDatabase: RoomDatabase() {
     abstract fun todoDao(): TodoDAO
 
@@ -15,7 +15,9 @@ abstract class TodoDatabase: RoomDatabase() {
         fun getInstance(context: Context): TodoDatabase {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(context.applicationContext,
-                    TodoDatabase::class.java, "todo.db").build()
+                    TodoDatabase::class.java, "todo.db")
+                    .fallbackToDestructiveMigration()
+                    .build()
             }
             return INSTANCE!!
         }
