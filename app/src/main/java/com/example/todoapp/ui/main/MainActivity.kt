@@ -12,6 +12,9 @@ import com.example.todoapp.ui.todo.TodoActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
+
 
 class MainActivity : AppCompatActivity(), MainScreen {
 
@@ -21,12 +24,14 @@ class MainActivity : AppCompatActivity(), MainScreen {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.example.todoapp.R.layout.activity_main)
         injector.inject(this)
         setSupportActionBar(toolbar)
+        Fabric.with(this, Crashlytics())
 
         todoLogo.setOnClickListener {
             mainPresenter.navigateToTodoList()
+            throw Error("Crash")
         }
     }
 
